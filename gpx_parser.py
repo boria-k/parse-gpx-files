@@ -59,11 +59,11 @@ if uploaded_file:
     df['distanceAcc'] = df['distance'].cumsum()
     totalDist = df['distance'].sum()
 
-    st.text('        number of points:', len(df))
-    st.text('   Total Ascend (metres):', int(totalAscend))
-    st.text('Max height diff (metres):', int(heightDiff))
-    st.text('       Distance (metres):',int(totalDist))
-    st.text('                    Time:', df.iloc[-1]['time'])
+    st.write('        number of points:', len(df))
+    st.write('   Total Ascend (metres):', int(totalAscend))
+    st.write('Max height diff (metres):', int(heightDiff))
+    st.write('       Distance (metres):',int(totalDist))
+    st.write('                    Time:', df.iloc[-1]['time'])
 
 
     fig = px.area(df[::10], x = 'distanceAcc', y = 'elevation',range_y=[df['elevation'].min()-10, df['elevation'].max() + 10])
