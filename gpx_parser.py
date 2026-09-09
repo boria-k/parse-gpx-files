@@ -52,7 +52,7 @@ if uploaded_file:
     elevation_lower_limit = df['elevation'].mean() - 2 * df['elevation'].std()
     df = df[(df['elevation'] < elevation_upper_limit) & (df['elevation'] > elevation_lower_limit)]
 
-    df['elevationDiff'] = df['elevation'] - df['elevation'].shift(-1)
+    df['elevationDiff'] = df['elevation'] - df['elevation'].shift(1)
     df['elevationDiffSmothed'] = df['elevationDiff'].rolling(window=91).mean()
     totalAscend  = df[df['elevationDiffSmothed'] > 0.00]['elevationDiffSmothed'].sum()
 
