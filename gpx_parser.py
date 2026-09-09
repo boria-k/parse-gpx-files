@@ -19,7 +19,6 @@ if uploaded_file:
     gpx_file = uploaded_file.getvalue().decode("utf-8")
     gpx = gpxpy.parse(gpx_file)
 
-a = 0
 route_info = list()
 for track in gpx.tracks:
     for segment in track.segments:
@@ -27,20 +26,23 @@ for track in gpx.tracks:
             if a == 0:
                 time_init = point.time
                 distance = 0
+                speed = 0
             else:
                 loc1 = (prev_lat,prev_lon)
                 loc2 = (point.latitude,point.longitude)
                 distance = hs.haversine(loc1,loc2,unit=Unit.METERS)
+                speed = 3.6 * distance / (point.time - prev_time).total_seconds()
             route_info.append({
                 'latitude': point.latitude,
                 'longitude': point.longitude,
                 'elevation': point.elevation,
                 'time': str(point.time-time_init),
-                'distance': distance                 
+                'distance': distance,
+                'speed': speed
             })
             prev_lat = point.latitude
             prev_lon = point.longitude
-            a+=1
+            prev_time = point.time
 
 
 df = pd.DataFrame(route_info)
@@ -75,3 +77,9 @@ fig.update_layout(map_style="open-street-map")
 fig = px.area(df[::10], x = 'distanceAcc', y = 'elevation',range_y=[df['elevation'].min()-10, df['elevation'].max() + 10])
 
 st.plotly_chart(fig)
+
+df['speedSmothed'] = df['speed'].rolling(window=31).mean()
+fig = px.area(df,x = 'distanceAcc', y = 'speedSmothed')
+fig.show(renderer='iframe')
+
+
