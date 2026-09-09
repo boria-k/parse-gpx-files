@@ -82,6 +82,6 @@ st.plotly_chart(fig)
 
 df['speedSmothed'] = df['speed'].rolling(window=31).mean()
 fig = px.area(df,x = 'distanceAcc', y = 'speedSmothed')
-fig.show(renderer='iframe')
+st.plotly_chart(fig)
 
 
