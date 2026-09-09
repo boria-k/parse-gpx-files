@@ -59,11 +59,11 @@ if uploaded_file:
     df['distanceAcc'] = df['distance'].cumsum()
     totalDist = df['distance'].sum()
 
-    st.write('        number of points:', len(df))
-    st.write('   Total Ascend (metres):', int(totalAscend))
+    st.write('Number of points        :', len(df))
+    st.write('Total Ascend (metres)   :', int(totalAscend))
     st.write('Max height diff (metres):', int(heightDiff))
-    st.write('       Distance (metres):',int(totalDist))
-    st.write('                    Time:', df.iloc[-1]['time'])
+    st.write('Distance (metres)       :',int(totalDist))
+    st.write('Time                    :', df.iloc[-1]['time'])
 
 
     fig = px.area(df[::10], x = 'distanceAcc', y = 'elevation',range_y=[df['elevation'].min()-10, df['elevation'].max() + 10])
@@ -85,5 +85,6 @@ if uploaded_file:
 
     # Set the background map style (e.g., "open-street-map", "carto-positron")
     fig.update_layout(map_style="open-street-map")
-    st.plotly_chart(fig)
+    #st.plotly_chart(fig)
+    st.map(df[['latitude', 'longitude']]
 
