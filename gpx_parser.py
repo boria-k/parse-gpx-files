@@ -1,5 +1,4 @@
 import streamlit as st
-import cv2
 import numpy as np
 from PIL import Image
 import requests
@@ -13,7 +12,7 @@ from haversine import Unit
 
 
 
-st.write("Streamlit is also great for more traditional ML use cases like computer vision or NLP. Here's an example of edge detection using OpenCV. 👁️") 
+st.write("Upload a GPX file to get basic statistics") 
 
 uploaded_file = st.file_uploader("Upload a track", type=["gpx"])
 if uploaded_file:
