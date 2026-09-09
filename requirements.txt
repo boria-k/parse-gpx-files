@@ -1,4 +1,3 @@
 gpxpy
 plotly
 haversine
-gpxpy.gpx
