@@ -86,5 +86,5 @@ if uploaded_file:
     # Set the background map style (e.g., "open-street-map", "carto-positron")
     fig.update_layout(map_style="open-street-map")
     #st.plotly_chart(fig)
-    st.map(df[['latitude', 'longitude']])
+    st.map(df[::10][['latitude', 'longitude']], size = 10)
 
