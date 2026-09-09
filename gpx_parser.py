@@ -20,13 +20,15 @@ if uploaded_file:
     gpx = gpxpy.parse(gpx_file)
 
 route_info = list()
+fst_point = True
 for track in gpx.tracks:
     for segment in track.segments:
         for point in segment.points:
-            if a == 0:
+            if fst_point:
                 time_init = point.time
                 distance = 0
                 speed = 0
+                fst_point = False
             else:
                 loc1 = (prev_lat,prev_lon)
                 loc2 = (point.latitude,point.longitude)
