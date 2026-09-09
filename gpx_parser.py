@@ -48,7 +48,9 @@ if uploaded_file:
 
 
     df = pd.DataFrame(route_info)
-
+    elevation_upper_limit = df['elevation'].mean() + 2 * df['elevation'].std()
+    elevation_lower_limit = df['elevation'].mean() - 2 * df['elevation'].std()
+    df = df[(df['elevation'] < elevation_upper_limit) & (df['elevation'] > elevation_lower_limit)]
 
     df['elevationDiff'] = df['elevation'] - df['elevation'].shift(-1)
     df['elevationDiffSmothed'] = df['elevationDiff'].rolling(window=91).mean()
