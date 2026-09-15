@@ -9,7 +9,10 @@ import plotly.express as px
 import haversine as hs
 from haversine import Unit
 
-
+st.set_page_config(
+    page_title="GPX File parser",
+    page_icon="🚀",  # Can be an emoji or a path to an image file
+)
 
 
 st.write("Upload a GPX file to get basic statistics") 
