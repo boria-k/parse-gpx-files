@@ -84,12 +84,12 @@ if uploaded_file:
     st.write('Time                    :', df.iloc[-1]['time'])
 
 
-    fig = px.area(df[::10], x = 'distanceAcc', y = 'elevation',range_y=[df['elevation'].min()-10, df['elevation'].max() + 10], line_shape='spline')
+    fig = px.area(df[::5], x = 'distanceAcc', y = 'elevation',range_y=[df['elevation'].min()-10, df['elevation'].max() + 10], line_shape='spline')
 
     st.plotly_chart(fig)
 
     
-    fig = px.area(df[::10],x = 'distanceAcc', y = 'speed_2', line_shape='spline')
+    fig = px.area(df[::5],x = 'distanceAcc', y = 'speed_2', line_shape='spline')
     st.plotly_chart(fig)
 
     fig = px.line_map(
