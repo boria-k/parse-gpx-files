@@ -11,7 +11,7 @@ from haversine import Unit
 
 st.set_page_config(
     page_title="GPX File parser",
-    page_icon="🚀",  # Can be an emoji or a path to an image file
+    page_icon="🗺️",  # Can be an emoji or a path to an image file
 )
 
 
