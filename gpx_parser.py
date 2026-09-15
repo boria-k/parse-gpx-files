@@ -19,6 +19,8 @@ if uploaded_file:
     gpx_file = uploaded_file.getvalue().decode("utf-8")
     gpx = gpxpy.parse(gpx_file)
 
+    gpx.simplify(max_distance=2.0) 
+
     route_info = list()
     fst_point = True
     for track in gpx.tracks:
@@ -48,17 +50,31 @@ if uploaded_file:
 
 
     df = pd.DataFrame(route_info)
+    # clean data
     elevation_upper_limit = df['elevation'].mean() + 2 * df['elevation'].std()
     elevation_lower_limit = df['elevation'].mean() - 2 * df['elevation'].std()
     df = df[(df['elevation'] < elevation_upper_limit) & (df['elevation'] > elevation_lower_limit)]
 
+    speed_upper_limit = df['speed'].mean() + 3 * df['speed'].std()
+    speed_lower_limit = df['speed'].mean() - 3 * df['speed'].std()
+    df = df[(df['speed'] < speed_upper_limit) & (df['speed'] > speed_lower_limit)]
+
+    # Elevation
     df['elevationDiff'] = df['elevation'] - df['elevation'].shift(1)
-    df['elevationDiffSmothed'] = df['elevationDiff'].rolling(window=91).mean()
-    totalAscend  = df[df['elevationDiffSmothed'] > 0.00]['elevationDiffSmothed'].sum()
+    totalAscend  = df[df['elevationDiff'] > 0.00]['elevationDiff'].sum()
 
     heightDiff = df['elevation'].max() - df['elevation'].min()
 
-    df['distanceAcc'] = df['distance'].cumsum()
+    # Distance, recalculate after samples dropped
+    df['lat_prev'] = df['latitude'].shift(1)
+    df['long_prev'] = df['longitude'].shift(1)
+    df['time_prev'] = df['time'].shift(1)
+    df['time_sec'] = pd.to_timedelta(df['time']).dt.total_seconds()
+    df['dist_2'] = df.apply(lambda row: hs.haversine((row['latitude'], row['longitude']),(row['lat_prev'], row['long_prev']),unit=Unit.METERS), axis=1)
+    window_size = 21
+    df['speed_2'] = 3.6 * df['dist_2'].rolling(window = window_size,center=True).sum() / (df['time_sec'].rolling(window = window_size,center=True).max() - df['time_sec'].rolling(window = window_size,center=True).min())
+
+    df['distanceAcc'] = df['dist_2'].cumsum()
     totalDist = df['distance'].sum()
 
     st.write('Number of points        :', len(df))
@@ -72,8 +88,8 @@ if uploaded_file:
 
     st.plotly_chart(fig)
 
-    df['speedSmothed'] = df['speed'].rolling(window=31).mean()
-    fig = px.area(df,x = 'distanceAcc', y = 'speedSmothed')
+    
+    fig = px.area(df,x = 'distanceAcc', y = 'speed_2')
     st.plotly_chart(fig)
 
     fig = px.line_map(
