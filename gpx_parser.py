@@ -80,7 +80,7 @@ if uploaded_file:
     df['distanceAcc'] = df['dist_2'].cumsum()
     totalDist = df['distance'].sum()
 
-    st.write('Number of points        :', len(df))
+    st.metric(label='Number of points', value = len(df))
     st.write('Total Ascend (metres)   :', int(totalAscend))
     st.write('Max height diff (metres):', int(heightDiff))
     st.write('Distance (metres)       :',int(totalDist))
