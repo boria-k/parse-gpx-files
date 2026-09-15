@@ -81,10 +81,10 @@ if uploaded_file:
     totalDist = df['distance'].sum()
 
     st.metric(label='Number of points', value = len(df))
-    st.write('Total Ascend (metres)   :', int(totalAscend))
-    st.write('Max height diff (metres):', int(heightDiff))
-    st.write('Distance (metres)       :',int(totalDist))
-    st.write('Time                    :', df.iloc[-1]['time'])
+    st.metric(label = 'Total Ascend (metres)', value = int(totalAscend))
+    st.metric(label='Max height diff (metres)', value=int(heightDiff))
+    st.metric(label='Distance (metres)',value=int(totalDist))
+    st.metric(label='Time', value=df.iloc[-1]['time'])
 
 
     fig = px.area(df[::5], x = 'distanceAcc', y = 'elevation',range_y=[df['elevation'].min()-10, df['elevation'].max() + 10], line_shape='spline')
